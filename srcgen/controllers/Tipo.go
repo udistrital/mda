@@ -8,89 +8,89 @@ import (
 	"fmt"
 )
 
-// Operaciones Crud Correo
-type CorreoController struct {
+// Operaciones Crud Tipo
+type TipoController struct {
 	beego.Controller
 }
 
 // @Title GetAll
 // @Description get all objects
-// @Success 200 {object} models.Correo
+// @Success 200 {object} models.Tipo
 // @Failure 403 :objectId is empty
 // @router / [get]
-func (j *CorreoController) GetAll() {
-	session,_ := GetSession()
-	obs := models.GetAllCorreos(session)
+func (j *TipoController) GetAll() {
+	session,_ := db.GetSession()
+	obs := models.GetAllTipos(session)
 	fmt.Println(obs)
 	j.Data["json"] = &obs
 	j.ServeJSON()
 }
 
 // @Title Get
-// @Description get Correo by nombre
-// @Param	nombre		path 	string	true		"El nombre de la Correo a consultar"
-// @Success 200 {object} models.Correo
+// @Description get Tipo by nombre
+// @Param	nombre		path 	string	true		"El nombre de la Tipo a consultar"
+// @Success 200 {object} models.Tipo
 // @Failure 403 :uid is empty
 // @router /:nombre [get]
-func (j *CorreoController) Get() {
+func (j *TipoController) Get() {
 	name := j.GetString(":nombre")
-	session, _ := GetSession()
+	session, _ := db.GetSession()
 	if name != "" {
-		Correo, err := models.GetCorreoByName(session,name)
+		tipo, err := models.GetTipoByName(session,name)
 		if err != nil {
 			j.Data["json"] = err.Error()
 		} else {
-			j.Data["json"] = jornada
+			j.Data["json"] = tipo
 		}
 	}
 	j.ServeJSON()
 }
 
-// @Title Borrar Correo
-// @Description Borrar Correo
+// @Title Borrar Tipo
+// @Description Borrar Tipo
 // @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
 // @Success 200 {string} ok
 // @Failure 403 objectId is empty
 // @router /:objectId [delete]
-func (j *CorreoController) Delete() {
-	session,_ := GetSession()
+func (j *TipoController) Delete() {
+	session,_ := db.GetSession()
 	objectId := j.Ctx.Input.Param(":objectId")
-	result, _ := models.DeleteCorreoById(session,objectId)
+	result, _ := models.DeleteTipoById(session,objectId)
 	j.Data["json"] = result
 	j.ServeJSON()
 }
 
-// @Title Crear Correo
-// @Description Crear Correo
-// @Param	body		body 	models.Correo	true		"Body para la creacion de Correo"
-// @Success 200 {int} Correo.Id
+// @Title Crear Tipo
+// @Description Crear Tipo
+// @Param	body		body 	models.Tipo	true		"Body para la creacion de Tipo"
+// @Success 200 {int} Tipo.Id
 // @Failure 403 body is empty
 // @router / [post]
-func (j *CorreoController) Post() {
-	var correo models.Correo
-	json.Unmarshal(j.Ctx.Input.RequestBody, &correo)
-	fmt.Println(correo)
-	session,_ := GetSession()
-	models.InsertCorreo(session,correo)
+func (j *TipoController) Post() {
+	var tipo models.Tipo
+	json.Unmarshal(j.Ctx.Input.RequestBody, &tipo)
+	fmt.Println(tipo)
+	session,_ := db.GetSession()
+	models.InsertTipo(session,tipo)
 	j.Data["json"] = "insert success!"
 	j.ServeJSON()
 }
 
 // @Title Update
-// @Description update the Correo
+// @Description update the Tipo
 // @Param	objectId		path 	string	true		"The objectid you want to update"
 // @Param	body		body 	models.Object	true		"The body"
 // @Success 200 {object} models.Object
 // @Failure 403 :objectId is empty
 // @router /:objectId [put]
-func (j *CorreoController) Put() {
+func (j *TipoController) Put() {
 	objectId := j.Ctx.Input.Param(":objectId")
 
-	var correo models.Correo
-	json.Unmarshal(j.Ctx.Input.RequestBody, &correo)
-	session,_ := GetSession()
+	var tipo models.Tipo
+	json.Unmarshal(j.Ctx.Input.RequestBody, &tipo)
+	session,_ := db.GetSession()
 
-	err := models.UpdateCorreo(session, correo,objectId)
+	err := models.UpdateTipo(session, tipo,objectId)
 	if err != nil {
 		j.Data["json"] = err.Error()
 	} else {

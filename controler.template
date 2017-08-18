@@ -19,7 +19,7 @@ type {{entity.name}}Controller struct {
 // @Failure 403 :objectId is empty
 // @router / [get]
 func (j *{{entity.name}}Controller) GetAll() {
-	session,_ := GetSession()
+	session,_ := db.GetSession()
 	obs := models.GetAll{{entity.name}}s(session)
 	fmt.Println(obs)
 	j.Data["json"] = &obs
@@ -34,13 +34,13 @@ func (j *{{entity.name}}Controller) GetAll() {
 // @router /:nombre [get]
 func (j *{{entity.name}}Controller) Get() {
 	name := j.GetString(":nombre")
-	session, _ := GetSession()
+	session, _ := db.GetSession()
 	if name != "" {
-		{{entity.name}}, err := models.Get{{entity.name}}ByName(session,name)
+		{{entity.name|lower}}, err := models.Get{{entity.name}}ByName(session,name)
 		if err != nil {
 			j.Data["json"] = err.Error()
 		} else {
-			j.Data["json"] = jornada
+			j.Data["json"] = {{entity.name|lower}}
 		}
 	}
 	j.ServeJSON()
@@ -53,7 +53,7 @@ func (j *{{entity.name}}Controller) Get() {
 // @Failure 403 objectId is empty
 // @router /:objectId [delete]
 func (j *{{entity.name}}Controller) Delete() {
-	session,_ := GetSession()
+	session,_ := db.GetSession()
 	objectId := j.Ctx.Input.Param(":objectId")
 	result, _ := models.Delete{{entity.name}}ById(session,objectId)
 	j.Data["json"] = result
@@ -70,7 +70,7 @@ func (j *{{entity.name}}Controller) Post() {
 	var {{entity.name|lower}} models.{{entity.name}}
 	json.Unmarshal(j.Ctx.Input.RequestBody, &{{entity.name|lower}})
 	fmt.Println({{entity.name|lower}})
-	session,_ := GetSession()
+	session,_ := db.GetSession()
 	models.Insert{{entity.name}}(session,{{entity.name|lower}})
 	j.Data["json"] = "insert success!"
 	j.ServeJSON()
@@ -88,7 +88,7 @@ func (j *{{entity.name}}Controller) Put() {
 
 	var {{entity.name|lower}} models.{{entity.name}}
 	json.Unmarshal(j.Ctx.Input.RequestBody, &{{entity.name|lower}})
-	session,_ := GetSession()
+	session,_ := db.GetSession()
 
 	err := models.Update{{entity.name}}(session, {{entity.name|lower}},objectId)
 	if err != nil {

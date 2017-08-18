@@ -1,6 +1,7 @@
 package models
 
 import (
+  "api/db"
 	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/mgo.v2"
 	"time"
@@ -12,11 +13,11 @@ const {{entity.name}}Collection = "{{entity.name|lower}}"
 type {{entity.name}} struct {
 	Id bson.ObjectId `json:"_id" bson:"_id,omitempty"`
 	{% for property in entity.properties %}
-		{% if property.type.name in ['string','integer'] %}
-			{{property.name}}	{{property.type|lower}} `json:"{{property.name|lower}}"`
+		{% if property.type.name in ['string','int','bool','time'] %}
+			{{property.name|capitalize}}	{{property.type|lower}} `json:"{{property.name|lower}}"`
 		{% endif %}
-		{% if property.type.name not in ['string','integer'] %}
-	    {{property.name}} []{{property.type.name}} `json:"{{property.name|lower}}s"`
+		{% if property.type.name not in ['string','int','bool','time'] %}
+	    {{property.name|capitalize}} []{{property.type.name}} `json:"{{property.name|lower}}s"`
 		{% endif %}
 	{% endfor %}
 
@@ -24,7 +25,7 @@ type {{entity.name}} struct {
 
 
 func Update{{entity.name}}(session *mgo.Session, j {{entity.name}}, id string) error{
-	c := Cursor(session,{{entity.name}}Collection)
+	c := db.Cursor(session,{{entity.name}}Collection)
 	defer session.Close()
 	// Update
 	err := c.Update(bson.M{"_id": bson.ObjectIdHex(id)}, &j)
@@ -37,14 +38,14 @@ func Update{{entity.name}}(session *mgo.Session, j {{entity.name}}, id string) e
 
 
 func Insert{{entity.name}}(session *mgo.Session, j {{entity.name}}) {
-	c := Cursor(session,{{entity.name}}Collection)
+	c := db.Cursor(session,{{entity.name}}Collection)
 	defer session.Close()
 	c.Insert(j)
 
 }
 
 func GetAll{{entity.name}}s(session *mgo.Session) []{{entity.name}} {
-	c := Cursor(session,{{entity.name}}Collection)
+	c := db.Cursor(session,{{entity.name}}Collection)
 	defer session.Close()
     fmt.Println("Getting all {{entity.name|lower}}s")
 	var {{entity.name|lower}}s []{{entity.name}}
@@ -56,7 +57,7 @@ func GetAll{{entity.name}}s(session *mgo.Session) []{{entity.name}} {
 }
 
 func Get{{entity.name}}ByName(session *mgo.Session,name string) ([]{{entity.name}},error) {
-	c := Cursor(session, {{entity.name}}Collection)
+	c := db.Cursor(session, {{entity.name}}Collection)
 	defer session.Close()
 	var {{entity.name|lower}}s []{{entity.name}}
 	err := c.Find(bson.M{"nombre": name}).All(&{{entity.name|lower}}s)
@@ -64,7 +65,7 @@ func Get{{entity.name}}ByName(session *mgo.Session,name string) ([]{{entity.name
 }
 
 func Delete{{entity.name}}ById(session *mgo.Session,id string) (string,error) {
-	c:= Cursor(session, JornadaCollection)
+	c:= db.Cursor(session, {{entity.name}}Collection)
 	defer session.Close()
 	err := c.RemoveId(bson.ObjectIdHex(id))
 	return "ok",err

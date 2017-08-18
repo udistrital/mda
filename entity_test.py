@@ -31,7 +31,7 @@ def get_entity_mm(debug=False):
     # Each model will have this simple types during reference resolving but
     # these will not be a part of `types` list of EntityModel.
     type_builtins = {
-            'integer': SimpleType(None, 'integer'),
+            'integer': SimpleType(None, 'int'),
             'string': SimpleType(None, 'string'),
             'time': SimpleType(None, 'Time.time'),
             'bool': SimpleType(None, 'boolean')

@@ -15,11 +15,11 @@ def main(debug=False):
     entity_mm = get_entity_mm(debug)
 
     # Build Person model from person.ent file
-    person_model = entity_mm.model_from_file(join(this_folder, 'person.ent'))
+    person_model = entity_mm.model_from_file(join(this_folder, 'predicado.ent'))
 
 
     # Create output folder
-    srcgen_folder_controler = join(this_folder, 'srcgen/controlers')
+    srcgen_folder_controler = join(this_folder, 'srcgen/controllers')
     if not exists(srcgen_folder_controler):
         mkdir(srcgen_folder_controler)
     srcgen_folder_model = join(this_folder, 'srcgen/models')

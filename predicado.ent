@@ -1,0 +1,16 @@
+entity Dominio {
+  nombre : string       // Nombre de la persona
+  descripcion : string       // Apellido de la persona
+}
+
+entity Predicado {
+  nombre : string       // Nombre de la persona
+  descripcion : string       // Apellido de la persona
+  tipo: Tipo
+  dominio: Dominio
+}                     // See entity_test.py
+
+entity Tipo {
+  nombre : string
+  descripcion : string
+}
