@@ -15,7 +15,7 @@ def main(debug=False):
     entity_mm = get_entity_mm(debug)
 
     # Build Person model from person.ent file
-    person_model = entity_mm.model_from_file(join(this_folder, 'predicado.ent'))
+    person_model = entity_mm.model_from_file(join(this_folder, 'voto.ent'))
 
 
     # Create output folder

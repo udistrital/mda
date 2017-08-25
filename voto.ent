@@ -1,0 +1,12 @@
+entity  Variable{
+ tipo : string
+ valor : string
+ nombre : string
+}
+
+
+entity  Ponderacion{
+ estamento : string
+ porcentaje : string
+ nombre : string
+}
