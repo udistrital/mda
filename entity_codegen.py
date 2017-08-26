@@ -19,6 +19,9 @@ def main(debug=False):
 
 
     # Create output folder
+    srcgen_folder = join(this_folder, 'srcgen')
+    if not exists(srcgen_folder):
+        mkdir(srcgen_folder)
     srcgen_folder_controler = join(this_folder, 'srcgen/controllers')
     if not exists(srcgen_folder_controler):
         mkdir(srcgen_folder_controler)
