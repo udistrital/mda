@@ -13,12 +13,7 @@ const {{entity.name}}Collection = "{{entity.name|lower}}"
 type {{entity.name}} struct {
 	Id bson.ObjectId `json:"_id" bson:"_id,omitempty"`
 	{% for property in entity.properties %}
-		{% if property.type.name in ['string','int','bool','time'] %}
-			{{property.name|capitalize}}	{{property.type|lower}} `json:"{{property.name|lower}}"`
-		{% endif %}
-		{% if property.type.name not in ['string','int','bool','time'] %}
-	    {{property.name|capitalize}} []{{property.type.name}} `json:"{{property.name|lower}}s"`
-		{% endif %}
+		{{property.name|capitalize}}	{{property.type|beegotype}} `json:"{{property.name|lower}}"`
 	{% endfor %}
 
 }

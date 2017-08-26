@@ -12,9 +12,9 @@ const VariableCollection = "variable"
 
 type Variable struct {
 	Id bson.ObjectId `json:"_id" bson:"_id,omitempty"`
-			Tipo	string `json:"tipo"`
-			Valor	string `json:"valor"`
-			Nombre	string `json:"nombre"`
+		Tipo	string `json:"tipo"`
+		Valor	string `json:"valor"`
+		Nombre	string `json:"nombre"`
 
 }
 

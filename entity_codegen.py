@@ -15,8 +15,19 @@ def main(debug=False):
     entity_mm = get_entity_mm(debug)
 
     # Build Person model from person.ent file
-    person_model = entity_mm.model_from_file(join(this_folder, 'voto.ent'))
+    entity_model = entity_mm.model_from_file(join(this_folder, 'voto.ent'))
 
+    def beegotype(s):
+        """
+        Maps type names from PrimitiveType to beego.
+        """
+        return {
+                'integer': 'int',
+                'string': 'string',
+                'bool': 'boolean',
+                'time': 'Time.time'
+
+        }.get(s.name, s.name)
 
     # Create output folder
     srcgen_folder = join(this_folder, 'srcgen')
@@ -35,13 +46,13 @@ def main(debug=False):
         trim_blocks=True,
         lstrip_blocks=True)
 
-    # Register filter for mapping Entity type names to Java type names.
-    #jinja_env.filters['javatype'] = javatype
+    # Register filter for mapping Entity type names to beego type names.
+    jinja_env.filters['beegotype'] = beegotype
 
     # Load template
     template = jinja_env.get_template('controler.template')
 
-    for entity in person_model.entities:
+    for entity in entity_model.entities:
         # For each entity generate java file
         with open(join(srcgen_folder_controler,
                        "%s.go" % entity.name.capitalize()), 'w') as f:
@@ -50,7 +61,7 @@ def main(debug=False):
     # Load template
     template = jinja_env.get_template('model.template')
 
-    for entity in person_model.entities:
+    for entity in entity_model.entities:
         # For each entity generate java file
         with open(join(srcgen_folder_model,
                        "%s.go" % entity.name.capitalize()), 'w') as f:
