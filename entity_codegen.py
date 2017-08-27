@@ -104,18 +104,22 @@ def main(debug=False):
             f.write(template.render(entity=entity))
 
     # frontend templates
-    # Load template
     template = jinja_env.get_template('templates/frontend/models/entity.ts.template')
 
     for entity in entity_model.entities:
         with open(join(srcgen_folder_frontend_model, "%s.ts" % entity.name.capitalize()), 'w') as f:
             f.write(template.render(entity=entity))
 
-    # Load template
     template = jinja_env.get_template('templates/frontend/entity/edit/entity-edit.component.ts.template')
 
     for entity in entity_model.entities:
         with open(join(srcgen_folder_frontend_entity, "%s-edit.component.ts" % entity.name.capitalize()), 'w') as f:
+            f.write(template.render(entity=entity))
+
+    template = jinja_env.get_template('templates/frontend/entity/edit/entity-edit.component.html.template')
+
+    for entity in entity_model.entities:
+        with open(join(srcgen_folder_frontend_entity, "%s-edit.component.html" % entity.name.capitalize()), 'w') as f:
             f.write(template.render(entity=entity))
 
 if __name__ == "__main__":

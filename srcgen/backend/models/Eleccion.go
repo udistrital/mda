@@ -16,9 +16,9 @@ type Eleccion struct {
   Votantes []Votante `json:"votantess"`
   Fechainicio	Time.time `json:"fechainicio"`
   Fechafinal	Time.time `json:"fechafinal"`
-  Ponderaciones	Time.time `json:"ponderaciones"`
-  Responsables	Time.time `json:"responsables"`
-  Habilitado	Time.time `json:"habilitado"`
+  Ponderaciones	string `json:"ponderaciones"`
+  Responsables	string `json:"responsables"`
+  Habilitado	boolean `json:"habilitado"`
 }
 
 

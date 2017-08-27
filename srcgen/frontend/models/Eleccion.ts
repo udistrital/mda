@@ -3,7 +3,7 @@ export class Eleccion {
   votantes: Votante[];
   fechaInicio:	Date;
   fechaFinal:	Date;
-  ponderaciones:	Date;
-  responsables:	Date;
-  habilitado:	Date;
+  ponderaciones:	string;
+  responsables:	string;
+  habilitado:	boolean;
 }

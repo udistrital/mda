@@ -8,9 +8,9 @@ entity Eleccion {
   votantes : Votante
   fechaInicio : time
   fechaFinal : time
-  ponderaciones : time
-  responsables : time
-  habilitado : time
+  ponderaciones : string
+  responsables : string
+  habilitado : bool
 }
 
 entity Votante {

@@ -1,0 +1,51 @@
+<h3>Edici&oacute;n {{entity.name|capitalize}}</h3>
+<p-dialog header="{{entity.name|capitalize}}" [(visible)]="display">
+  La {{entity.name|lower}} ha sido editada correctamente
+  <p-footer>
+    <button type="button" pButton icon="fa-check" (click)="cerrarDialogo()" label="Cerrar"></button>
+  </p-footer>
+</p-dialog>
+<div class="ui-g">
+  <div class="ui-g-8">
+    <form class="form-horizontal">
+    <!------------------------------------------------>
+    {% for property in entity.properties %}
+    {% if property.type.name == "time" %}
+    <div class="form-group">
+      <label for="{{property.name|lower}}" class="col-sm-2 control-label">{{property.name|capitalize}}</label>
+      <div class="col-sm-10">
+          <date-picker mode="datetime" [(ngModel)]="{{entity.name|lower}}.{{property.name|lower}}" name="{{property.name|lower}}"></date-picker>
+      </div>
+    </div>
+    {% elif property.type.name == "boolean" %}
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" [(ngModel)]="{{entity.name|lower}}.{{property.name|lower}}" name="{{property.name|lower}}"> {{property.name|capitalize}}
+          </label>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="form-group">
+      <label for="{{property.name|lower}}" class="col-sm-2 control-label">{{property.name|capitalize}} </label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="{{property.name|lower}}" placeholder="{{property.name|capitalize}} {{entity.name|capitalize}}" [(ngModel)]="{{entity.name|lower}}.{{property.name|lower}}" name="{{property.name|lower}}">
+      </div>
+    </div>
+    {% endif %}
+  	{% endfor %}
+
+    <!------------------------------------------------>
+
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-default" (click)="actualizar({{entity.name|lower}})">Actualizar</button>
+          <button type="submit" class="btn btn-default" (click)="regresar()">Cancelar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
