@@ -70,6 +70,10 @@ def main(debug=False):
     srcgen_folder_frontend_model = join(this_folder, 'srcgen/frontend/models')
     if not exists(srcgen_folder_frontend_model):
         mkdir(srcgen_folder_frontend_model)
+    srcgen_folder_frontend_entity = join(this_folder, 'srcgen/frontend/entity')
+    if not exists(srcgen_folder_frontend_entity):
+        mkdir(srcgen_folder_frontend_entity)
+
 
     # Initialize template engine.
     jinja_env = jinja2.Environment(
@@ -99,11 +103,19 @@ def main(debug=False):
         with open(join(srcgen_folder_model, "%s.go" % entity.name.capitalize()), 'w') as f:
             f.write(template.render(entity=entity))
 
+    # frontend templates
     # Load template
     template = jinja_env.get_template('templates/frontend/models/entity.ts.template')
 
     for entity in entity_model.entities:
-        with open(join(srcgen_folder_frontend_model, "%s.go" % entity.name.capitalize()), 'w') as f:
+        with open(join(srcgen_folder_frontend_model, "%s.ts" % entity.name.capitalize()), 'w') as f:
+            f.write(template.render(entity=entity))
+
+    # Load template
+    template = jinja_env.get_template('templates/frontend/entity/edit/entity-edit.component.ts.template')
+
+    for entity in entity_model.entities:
+        with open(join(srcgen_folder_frontend_entity, "%s-edit.component.ts" % entity.name.capitalize()), 'w') as f:
             f.write(template.render(entity=entity))
 
 if __name__ == "__main__":
