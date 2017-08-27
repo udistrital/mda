@@ -12,10 +12,9 @@ const PonderacionCollection = "ponderacion"
 
 type Ponderacion struct {
 	Id bson.ObjectId `json:"_id" bson:"_id,omitempty"`
-		Estamento	string `json:"estamento"`
-		Porcentaje	string `json:"porcentaje"`
-		Nombre	string `json:"nombre"`
-
+  Estamento	string `json:"estamento"`
+  Porcentaje	string `json:"porcentaje"`
+  Nombre	string `json:"nombre"`
 }
 
 

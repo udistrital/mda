@@ -12,13 +12,12 @@ const VotanteCollection = "votante"
 
 type Votante struct {
 	Id bson.ObjectId `json:"_id" bson:"_id,omitempty"`
-		Identificacion	string `json:"identificacion"`
-		Nombre	string `json:"nombre"`
-		Apellidos	string `json:"apellidos"`
-		Codigo	string `json:"codigo"`
-		Estamento	string `json:"estamento"`
-		Edad	int `json:"edad"`
-
+  Identificacion	string `json:"identificacion"`
+  Nombre	string `json:"nombre"`
+  Apellidos	string `json:"apellidos"`
+  Codigo	string `json:"codigo"`
+  Estamento	string `json:"estamento"`
+  Edad	int `json:"edad"`
 }
 
 

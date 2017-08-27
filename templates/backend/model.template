@@ -13,9 +13,12 @@ const {{entity.name}}Collection = "{{entity.name|lower}}"
 type {{entity.name}} struct {
 	Id bson.ObjectId `json:"_id" bson:"_id,omitempty"`
 	{% for property in entity.properties %}
-		{{property.name|capitalize}}	{{property.type|beegotype}} `json:"{{property.name|lower}}"`
+  {% if property is entity %}
+  {{property.name|capitalize}} []{{property.type.name}} `json:"{{property.name|lower}}s"`
+  {% else %}
+  {{property.name|capitalize}}	{{property.type|beegotype}} `json:"{{property.name|lower}}"`
+  {% endif %}
 	{% endfor %}
-
 }
 
 

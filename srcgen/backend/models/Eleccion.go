@@ -12,14 +12,13 @@ const EleccionCollection = "eleccion"
 
 type Eleccion struct {
 	Id bson.ObjectId `json:"_id" bson:"_id,omitempty"`
-		Nombre	string `json:"nombre"`
-		Votantes	Votante `json:"votantes"`
-		Fechainicio	Time.time `json:"fechainicio"`
-		Fechafinal	Time.time `json:"fechafinal"`
-		Ponderaciones	Time.time `json:"ponderaciones"`
-		Responsables	Time.time `json:"responsables"`
-		Habilitado	Time.time `json:"habilitado"`
-
+  Nombre	string `json:"nombre"`
+  Votantes []Votante `json:"votantess"`
+  Fechainicio	Time.time `json:"fechainicio"`
+  Fechafinal	Time.time `json:"fechafinal"`
+  Ponderaciones	Time.time `json:"ponderaciones"`
+  Responsables	Time.time `json:"responsables"`
+  Habilitado	Time.time `json:"habilitado"`
 }
 
 
