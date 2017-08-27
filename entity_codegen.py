@@ -107,20 +107,33 @@ def main(debug=False):
     template = jinja_env.get_template('templates/frontend/models/entity.ts.template')
 
     for entity in entity_model.entities:
-        with open(join(srcgen_folder_frontend_model, "%s.ts" % entity.name.capitalize()), 'w') as f:
+        with open(join(srcgen_folder_frontend_model, "%s.ts" % entity.name.lower()), 'w') as f:
             f.write(template.render(entity=entity))
 
     template = jinja_env.get_template('templates/frontend/entity/edit/entity-edit.component.ts.template')
 
     for entity in entity_model.entities:
-        with open(join(srcgen_folder_frontend_entity, "%s-edit.component.ts" % entity.name.capitalize()), 'w') as f:
+        with open(join(srcgen_folder_frontend_entity, "%s-edit.component.ts" % entity.name.lower()), 'w') as f:
             f.write(template.render(entity=entity))
 
     template = jinja_env.get_template('templates/frontend/entity/edit/entity-edit.component.html.template')
 
     for entity in entity_model.entities:
-        with open(join(srcgen_folder_frontend_entity, "%s-edit.component.html" % entity.name.capitalize()), 'w') as f:
+        with open(join(srcgen_folder_frontend_entity, "%s-edit.component.html" % entity.name.lower()), 'w') as f:
             f.write(template.render(entity=entity))
+
+    template = jinja_env.get_template('templates/frontend/entity/new/entity-new.component.ts.template')
+
+    for entity in entity_model.entities:
+        with open(join(srcgen_folder_frontend_entity, "%s-new.component.ts" % entity.name.lower()), 'w') as f:
+            f.write(template.render(entity=entity))
+
+    template = jinja_env.get_template('templates/frontend/entity/new/entity-new.component.html.template')
+
+    for entity in entity_model.entities:
+        with open(join(srcgen_folder_frontend_entity, "%s-new.component.html" % entity.name.lower()), 'w') as f:
+            f.write(template.render(entity=entity))
+
 
 if __name__ == "__main__":
     main()
