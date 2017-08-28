@@ -2,20 +2,20 @@
 An example how to generate angularjs code from textX model using jinja2
 template engine (http://jinja.pocoo.org/docs/dev/)
 """
+import sys
 from os import mkdir
 from os.path import exists, dirname, join
 import jinja2
 from entity_test import get_entity_mm
 
-
-def main(debug=False):
+def main(entity,debug=False):
 
     this_folder = dirname(__file__)
 
     entity_mm = get_entity_mm(debug)
 
     # Build Person model from person.ent file
-    entity_model = entity_mm.model_from_file(join(this_folder, 'voto.ent'))
+    entity_model = entity_mm.model_from_file(join(this_folder, "entities/{}".format(entity)))
 
     #print entity_model.entities
 
@@ -136,4 +136,10 @@ def main(debug=False):
 
 
 if __name__ == "__main__":
-    main()
+    entity = None
+    if len(sys.argv) > 1:
+        entity = sys.argv[1]
+        main(entity)
+    else:
+        print "Debe ingresar el nombre de la entidad con la cual quiere generar el codigo"
+        exit(1)

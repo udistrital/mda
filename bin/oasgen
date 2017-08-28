@@ -1,0 +1,27 @@
+#!/bin/bash
+
+function gen {
+  # Copiar la entidad a la carpeta de entidades
+  cp $PWD/$1 $OASGEN_PATH/entities
+
+  # Borrar el codigo que se haya generado antes
+  rm -rf $OASGEN_PATH/srcgen/*
+
+  # Hacer la llamada a Docker para genere el codigo
+  docker exec -it oasgen bash -c "python /tool/entity_codegen.py $1"
+
+  # Copiar los resultados de regreso a la carpeta donde los necesita
+  cp -r $OASGEN_PATH/srcgen $PWD
+}
+
+if [ -z "$1" ]; then
+  echo "Debe pasar como parametro una entidad"
+else
+  # Verificar que el contenedor este corriendo
+  docker_running=`docker ps -q -f name=^/oasgen$`
+  if [ -z "$docker_running" ]; then
+    echo "El contenedor del generador no esta corriendo ejecute el script de bootstrap primero"
+  else
+    gen $1
+  fi
+fi

@@ -1,0 +1,4 @@
+srcgen/*
+entities/*
+*.pyc
+.DS_Store

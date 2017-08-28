@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  textx:
+    container_name: "oasgen"
+    build: ./tool
+    volumes:
+      - "./srcgen:/tool/srcgen"
+      - "./entities:/tool/entities"
