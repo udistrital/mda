@@ -1,0 +1,70 @@
+package models
+
+import (
+  "api/db"
+	"gopkg.in/mgo.v2/bson"
+	"gopkg.in/mgo.v2"
+	"time"
+	"fmt"
+)
+
+const {{entity.name}}Collection = "{{entity.name|lower}}"
+
+type {{entity.name}} struct {
+	Id bson.ObjectId `json:"_id" bson:"_id,omitempty"`
+	{% for property in entity.properties %}
+  {% if property is entity %}
+  {{property.name|capitalize}} []{{property.type.name}} `json:"{{property.name|lower}}s"`
+  {% else %}
+  {{property.name|capitalize}}	{{property.type|beegotype}} `json:"{{property.name|lower}}"`
+  {% endif %}
+	{% endfor %}
+}
+
+
+func Update{{entity.name}}(session *mgo.Session, j {{entity.name}}, id string) error{
+	c := db.Cursor(session,{{entity.name}}Collection)
+	defer session.Close()
+	// Update
+	err := c.Update(bson.M{"_id": bson.ObjectIdHex(id)}, &j)
+	if err != nil {
+		panic(err)
+	}
+	return err
+
+}
+
+
+func Insert{{entity.name}}(session *mgo.Session, j {{entity.name}}) {
+	c := db.Cursor(session,{{entity.name}}Collection)
+	defer session.Close()
+	c.Insert(j)
+
+}
+
+func GetAll{{entity.name}}s(session *mgo.Session) []{{entity.name}} {
+	c := db.Cursor(session,{{entity.name}}Collection)
+	defer session.Close()
+    fmt.Println("Getting all {{entity.name|lower}}s")
+	var {{entity.name|lower}}s []{{entity.name}}
+	err := c.Find(bson.M{}).All(&{{entity.name|lower}}s)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return {{entity.name|lower}}s
+}
+
+func Get{{entity.name}}ByName(session *mgo.Session,name string) ([]{{entity.name}},error) {
+	c := db.Cursor(session, {{entity.name}}Collection)
+	defer session.Close()
+	var {{entity.name|lower}}s []{{entity.name}}
+	err := c.Find(bson.M{"nombre": name}).All(&{{entity.name|lower}}s)
+	return {{entity.name|lower}}s,err
+}
+
+func Delete{{entity.name}}ById(session *mgo.Session,id string) (string,error) {
+	c:= db.Cursor(session, {{entity.name}}Collection)
+	defer session.Close()
+	err := c.RemoveId(bson.ObjectIdHex(id))
+	return "ok",err
+}

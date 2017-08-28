@@ -1,0 +1,43 @@
+import { Component, OnInit } from '@angular/core';
+import { {{entity.name|capitalize}} } from '../../models/{{entity.name|lower}}';
+import { {{entity.name|capitalize}}Service } from '../../services/{{entity.name|lower}}.service';
+import { Location } from '@angular/common';
+import { ActivatedRoute, Params } from '@angular/router';
+
+
+import 'rxjs/add/operator/switchMap';
+
+@Component({
+  selector: 'app-{{entity.name|lower}}-edit',
+  templateUrl: './{{entity.name|lower}}-edit.component.html',
+  styleUrls: ['./{{entity.name|lower}}-edit.component.css']
+})
+export class {{entity.name|capitalize}}EditComponent implements OnInit {
+
+  {{entity.name|lower}}: {{entity.name|capitalize}} = new {{entity.name|capitalize}}();
+  display = false;
+  id: string;
+  test = new Date('2016-01-05T09:05:05.035Z');
+
+  constructor(private route: ActivatedRoute, private location: Location, private {{entity.name|lower}}Service: {{entity.name|capitalize}}Service) {
+
+  }
+
+  actualizar({{entity.name|lower}}: {{entity.name|capitalize}}): void {
+    this.{{entity.name|lower}}Service.update({{entity.name|lower}}).then(() => this.display = true);
+  }
+
+  ngOnInit() {
+    this.route.params.switchMap((params: Params) => this.{{entity.name|lower}}Service.get{{entity.name|capitalize}}(params['id']))
+      .subscribe({{entity.name|lower}} => this.{{entity.name|lower}} = {{entity.name|lower}});
+  }
+
+  regresar(): void {
+    this.location.back();
+  }
+
+  cerrarDialogo(): void {
+    this.display = false;
+    this.location.back();
+  }
+}

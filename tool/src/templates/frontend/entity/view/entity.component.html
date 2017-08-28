@@ -1,0 +1,33 @@
+
+<h2>Jornadas Electorales</h2>
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" #cd>
+  <p-footer>
+    <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+    <button type="button" pButton icon="fa-check" label="Si" (click)="cd.accept()"></button>
+  </p-footer>
+</p-confirmDialog>
+<p-dataTable [value]="jornadas">
+  <p-column field="nombre" header="Nombre" [sortable]="true"></p-column>
+  <p-column field="fecha_inicio" header="Fecha Inicio">
+    <ng-template let-col let-jornada="rowData" pTemplate="body">
+    <span>{{ jornada.fecha_inicio | date: 'MMM d, y H:mm:ss' : '+0500' }}</span>
+    </ng-template>
+  </p-column>
+  <p-column field="fecha_fin" header="Fecha Fin">
+    <ng-template let-col let-jornada="rowData" pTemplate="body">
+      <span>{{ jornada.fecha_fin | date: 'MMM d, y H:mm:ss' : '+0500' }}</span>
+    </ng-template>
+  </p-column>
+  <p-column field="habilitado" header="Jornada Habilitada" [sortable]="true">
+    <ng-template let-col let-jornada="rowData" pTemplate="body">
+      <span>{{ jornada.habilitado ?  'Si' : 'No' }}</span>
+    </ng-template>
+  </p-column>
+  <p-column field="" header="Acciones">
+    <ng-template let-col let-jornada="rowData" pTemplate="body">
+      <button pButton icon="fa-close" type="button" (click)="borrar(jornada)"></button>
+      <button pButton icon="fa-edit" type="button" (click)="editar(jornada)"></button>
+    </ng-template>
+  </p-column>
+</p-dataTable>
+<button class="accept" pButton type="button" label="Crear Jornada" (click)="newJornada()"></button>

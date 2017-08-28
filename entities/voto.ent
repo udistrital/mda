@@ -1,0 +1,37 @@
+type integer
+type string
+type time
+type bool
+
+entity Eleccion {
+  nombre : string
+  votantes : Votante
+  fechaInicio : time
+  fechaFinal : time
+  ponderaciones : string
+  responsables : string
+  habilitado : bool
+}
+
+entity Votante {
+  identificacion : string
+  nombre : string
+  apellidos : string
+  codigo : string
+  estamento : string
+  edad : integer
+}
+
+
+entity  Variable{
+ tipo : string
+ valor : string
+ nombre : string
+}
+
+
+entity  Ponderacion{
+ estamento : string
+ porcentaje : string
+ nombre : string
+}
