@@ -1,9 +1,0 @@
-export class {{entity.name|capitalize}} {
-  {% for property in entity.properties %}
-  {% if property is entity %}
-  {{property.name}}: {{property.type.name}}[];
-  {% else %}
-  {{property.name}}:	{{property.type|angulartype}};
-  {% endif %}
-	{% endfor %}
-}
