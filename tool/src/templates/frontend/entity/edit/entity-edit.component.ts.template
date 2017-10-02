@@ -10,7 +10,7 @@ import 'rxjs/add/operator/switchMap';
 @Component({
   selector: 'app-{{entity.name|lower}}-edit',
   templateUrl: './{{entity.name|lower}}-edit.component.html',
-  styleUrls: ['./{{entity.name|lower}}-edit.component.css']
+  styleUrls: []
 })
 export class {{entity.name|capitalize}}EditComponent implements OnInit {
 
