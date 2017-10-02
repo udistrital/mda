@@ -14,7 +14,7 @@ def main(entity,debug=False):
 
     entity_mm = get_entity_mm(debug)
 
-    # Build Person model from person.ent file
+    # Build Model from <model>.ent file
     entity_model = entity_mm.model_from_file(join(this_folder, "entities/{}".format(entity)))
 
     #print entity_model.entities
@@ -35,7 +35,8 @@ def main(entity,debug=False):
         return {
                 'integer': 'int',
                 'string': 'string',
-                'bool': 'boolean',
+                'bool': 'bool',
+                'boolean':'bool',
                 'time': 'Time.time'
         }.get(s.name, s.name)
 
@@ -54,25 +55,40 @@ def main(entity,debug=False):
     srcgen_folder = join(this_folder, 'srcgen')
     if not exists(srcgen_folder):
         mkdir(srcgen_folder)
+
     srcgen_folder_backend = join(this_folder, 'srcgen/backend')
     if not exists(srcgen_folder_backend):
         mkdir(srcgen_folder_backend)
+
     srcgen_folder_controler = join(this_folder, 'srcgen/backend/controllers')
     if not exists(srcgen_folder_controler):
         mkdir(srcgen_folder_controler)
+
     srcgen_folder_model = join(this_folder, 'srcgen/backend/models')
     if not exists(srcgen_folder_model):
         mkdir(srcgen_folder_model)
+
+    srcgen_folder_router = join(this_folder, 'srcgen/backend/routers')
+    if not exists(srcgen_folder_router):
+        mkdir(srcgen_folder_router)
+
     # Create output folder for frontend
     srcgen_folder_frontend = join(this_folder, 'srcgen/frontend')
     if not exists(srcgen_folder_frontend):
         mkdir(srcgen_folder_frontend)
+
     srcgen_folder_frontend_model = join(this_folder, 'srcgen/frontend/models')
     if not exists(srcgen_folder_frontend_model):
         mkdir(srcgen_folder_frontend_model)
-    srcgen_folder_frontend_entity = join(this_folder, 'srcgen/frontend/entity')
+
+    srcgen_folder_frontend_entity = join(this_folder, "srcgen/frontend/entities")
     if not exists(srcgen_folder_frontend_entity):
         mkdir(srcgen_folder_frontend_entity)
+
+    srcgen_folder_frontend_services = join(this_folder, 'srcgen/frontend/services')
+    if not exists(srcgen_folder_frontend_services):
+        mkdir(srcgen_folder_frontend_services)
+
 
 
     # Initialize template engine.
@@ -88,7 +104,7 @@ def main(entity,debug=False):
 
     jinja_env.tests['entity'] = is_entity
 
-    # Load template
+    # Load Backend Controllers
     template = jinja_env.get_template('templates/backend/controller.template')
 
     for entity in entity_model.entities:
@@ -96,12 +112,17 @@ def main(entity,debug=False):
         with open(join(srcgen_folder_controler, "%s.go" % entity.name.capitalize()), 'w') as f:
             f.write(template.render(entity=entity))
 
-    # Load template
+    # Load Backend models
     template = jinja_env.get_template('templates/backend/model.template')
 
     for entity in entity_model.entities:
         with open(join(srcgen_folder_model, "%s.go" % entity.name.capitalize()), 'w') as f:
             f.write(template.render(entity=entity))
+
+    # Load Backend Router
+    template = jinja_env.get_template('templates/backend/router.template')
+    with open(join(srcgen_folder_router, "router.go"), 'w') as f:
+        f.write(template.render(entities=entity_model.entities))
 
     # frontend templates
     template = jinja_env.get_template('templates/frontend/models/entity.ts.template')
@@ -134,10 +155,28 @@ def main(entity,debug=False):
         with open(join(srcgen_folder_frontend_entity, "%s-new.component.html" % entity.name.lower()), 'w') as f:
             f.write(template.render(entity=entity))
 
+    template = jinja_env.get_template('templates/frontend/entity/view/entity.component.html.template')
+
+    for entity in entity_model.entities:
+        with open(join(srcgen_folder_frontend_entity, "%s.component.html" % entity.name.lower()), 'w') as f:
+            f.write(template.render(entity=entity))
+
+    template = jinja_env.get_template('templates/frontend/entity/view/entity.component.ts.template')
+
+    for entity in entity_model.entities:
+        with open(join(srcgen_folder_frontend_entity, "%s.component.ts" % entity.name.lower()), 'w') as f:
+            f.write(template.render(entity=entity))
+
+    template = jinja_env.get_template('templates/frontend/services/entity.service.ts.template')
+
+    for entity in entity_model.entities:
+        with open(join(srcgen_folder_frontend_services, "%s.service.ts" % entity.name.lower()), 'w') as f:
+            f.write(template.render(entity=entity))
 
 if __name__ == "__main__":
     entity = None
     if len(sys.argv) > 1:
+        print "Creando codigo ..."
         entity = sys.argv[1]
         main(entity)
     else:

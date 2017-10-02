@@ -4,7 +4,6 @@ import (
   "api/db"
 	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/mgo.v2"
-	"time"
 	"fmt"
 )
 
@@ -16,7 +15,7 @@ type {{entity.name}} struct {
   {% if property is entity %}
   {{property.name|capitalize}} []{{property.type.name}} `json:"{{property.name|lower}}s"`
   {% else %}
-  {{property.name|capitalize}}	{{property.type|beegotype}} `json:"{{property.name|lower}}"`
+  {{property.name|capitalize}} {{property.type | beegotype }} `json:"{{property.name|lower}}"`
   {% endif %}
 	{% endfor %}
 }

@@ -1,11 +1,15 @@
 #!/bin/bash
 
 function gen {
+
+  # Eliminar cualquier entidad que ya exista
+  rm -rf $OASGEN_PATH/entities/*
+
   # Copiar la entidad a la carpeta de entidades
   cp $PWD/$1 $OASGEN_PATH/entities
 
   # Borrar el codigo que se haya generado antes
-  rm -rf $OASGEN_PATH/srcgen/*
+  docker exec -it oasgen bash -c "rm -rf /tool/srcgen/*"
 
   # Hacer la llamada a Docker para genere el codigo
   docker exec -it oasgen bash -c "python /tool/entity_codegen.py $1"

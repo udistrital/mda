@@ -1,10 +1,11 @@
 package controllers
 
 import (
+  "api/db"
 	"api/models"
 	"github.com/astaxie/beego"
 	"encoding/json"
-	_  "gopkg.in/mgo.v2"
+	_ "gopkg.in/mgo.v2"
 	"fmt"
 )
 
@@ -15,14 +16,19 @@ type {{entity.name}}Controller struct {
 
 // @Title GetAll
 // @Description get all objects
-// @Success 200 {object} models.{{entity.name}}
+// @Success 200 {{entity.name}} models.{{entity.name}}
 // @Failure 403 :objectId is empty
 // @router / [get]
 func (j *{{entity.name}}Controller) GetAll() {
 	session,_ := db.GetSession()
 	obs := models.GetAll{{entity.name}}s(session)
-	fmt.Println(obs)
-	j.Data["json"] = &obs
+
+  if len(obs) == 0 {
+		j.Data["json"] = []string{}
+	} else {
+		j.Data["json"] = &obs
+	}
+	
 	j.ServeJSON()
 }
 
@@ -96,5 +102,27 @@ func (j *{{entity.name}}Controller) Put() {
 	} else {
 		j.Data["json"] = "update success!"
 	}
+	j.ServeJSON()
+}
+
+// @Title Preflight options
+// @Description Crear {{entity.name}}
+// @Param	body		body 	models.{{entity.name}}	true		"Body para la creacion de {{entity.name}}"
+// @Success 200 {int} {{entity.name}}.Id
+// @Failure 403 body is empty
+// @router / [options]
+func (j *{{entity.name}}Controller) Options() {
+	j.Data["json"] = "success!"
+	j.ServeJSON()
+}
+
+// @Title Preflight options
+// @Description Crear {{entity.name}}
+// @Param	body		body 	models.{{entity.name}} true		"Body para la creacion de {{entity.name}}"
+// @Success 200 {int} {{entity.name}}.Id
+// @Failure 403 body is empty
+// @router /:objectId [options]
+func (j *{{entity.name}}Controller) {{entity.name}}DeleteOptions() {
+	j.Data["json"] = "success!"
 	j.ServeJSON()
 }
