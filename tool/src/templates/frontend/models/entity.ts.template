@@ -1,3 +1,10 @@
+
+{% for property in entity.properties %}
+  {% if property is entity %}
+import { {{property.type.name | capitalize}} } from './{{ property.type.name | lower }}';
+  {% endif %}
+{%endfor%}
+
 export class {{entity.name|capitalize}} {
    id: string;
   {% for property in entity.properties %}
