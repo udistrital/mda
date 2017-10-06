@@ -53,11 +53,11 @@ func GetAll{{entity.name}}s(session *mgo.Session) []{{entity.name}} {
 	return {{entity.name|lower}}s
 }
 
-func Get{{entity.name}}ByName(session *mgo.Session,name string) ([]{{entity.name}},error) {
+func Get{{entity.name}}ById(session *mgo.Session,id string) ([]{{entity.name}},error) {
 	c := db.Cursor(session, {{entity.name}}Collection)
 	defer session.Close()
 	var {{entity.name|lower}}s []{{entity.name}}
-	err := c.Find(bson.M{"nombre": name}).All(&{{entity.name|lower}}s)
+	err := c.Find(bson.M{"_id": bson.ObjectIdHex(id)}).All(&{{entity.name|lower}}s)
 	return {{entity.name|lower}}s,err
 }
 
