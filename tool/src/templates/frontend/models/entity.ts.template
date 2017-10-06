@@ -1,4 +1,5 @@
 export class {{entity.name|capitalize}} {
+   id: string;
   {% for property in entity.properties %}
   {% if property is entity %}
   {{property.name}}: {{property.type.name}}[];
