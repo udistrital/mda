@@ -10,5 +10,11 @@
 {% for property in entity.properties %}
   <p-column field="{{property.name|lower}}" header="{{property.name|capitalize}}" [sortable]="true"></p-column>
 {% endfor %}
+<p-column field="" header="Acciones">
+    <ng-template let-col let-registro="rowData" pTemplate="body">
+      <button pButton icon="fa-close" type="button" (click)="borrar(registro)"></button>
+      <button pButton icon="fa-edit" type="button" (click)="editar(registro)"></button>
+    </ng-template>
+  </p-column>
 </p-dataTable>
 <button class="accept" pButton type="button" label="Crear {{entity.name}}" (click)="new{{entity.name}}()"></button>

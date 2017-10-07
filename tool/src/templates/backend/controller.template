@@ -28,7 +28,7 @@ func (j *{{entity.name}}Controller) GetAll() {
 	} else {
 		j.Data["json"] = &obs
 	}
-	
+
 	j.ServeJSON()
 }
 
@@ -37,12 +37,12 @@ func (j *{{entity.name}}Controller) GetAll() {
 // @Param	nombre		path 	string	true		"El nombre de la {{entity.name}} a consultar"
 // @Success 200 {object} models.{{entity.name}}
 // @Failure 403 :uid is empty
-// @router /:nombre [get]
+// @router /:id [get]
 func (j *{{entity.name}}Controller) Get() {
-	name := j.GetString(":nombre")
+	id := j.GetString(":id")
 	session, _ := db.GetSession()
 	if name != "" {
-		{{entity.name|lower}}, err := models.Get{{entity.name}}ByName(session,name)
+		{{entity.name|lower}}, err := models.Get{{entity.name}}ById(session,id)
 		if err != nil {
 			j.Data["json"] = err.Error()
 		} else {
