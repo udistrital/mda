@@ -4,6 +4,7 @@ function gen {
 
   # Eliminar cualquier entidad que ya exista
   rm -rf $OASGEN_PATH/entities/*
+  rm -rf $PWD/srcgen
 
   # Copiar la entidad a la carpeta de entidades
   cp $PWD/$1 $OASGEN_PATH/entities

@@ -3,6 +3,7 @@ An example how to generate angularjs code from textX model using jinja2
 template engine (http://jinja.pocoo.org/docs/dev/)
 """
 import sys
+import os
 from os import mkdir
 from os.path import exists, dirname, join
 import jinja2
@@ -81,13 +82,13 @@ def main(entity,debug=False):
     if not exists(srcgen_folder_frontend_model):
         mkdir(srcgen_folder_frontend_model)
 
-    srcgen_folder_frontend_entity = join(this_folder, "srcgen/frontend/entities")
-    if not exists(srcgen_folder_frontend_entity):
-        mkdir(srcgen_folder_frontend_entity)
-
     srcgen_folder_frontend_services = join(this_folder, 'srcgen/frontend/services')
     if not exists(srcgen_folder_frontend_services):
         mkdir(srcgen_folder_frontend_services)
+
+    srcgen_folder_frontend_routing = join(this_folder, 'srcgen/frontend/routing')
+    if not exists(srcgen_folder_frontend_routing):
+        mkdir(srcgen_folder_frontend_routing)
 
 
 
@@ -125,53 +126,34 @@ def main(entity,debug=False):
         f.write(template.render(entities=entity_model.entities))
 
     # frontend templates
+    # Models
     template = jinja_env.get_template('templates/frontend/models/entity.ts.template')
 
     for entity in entity_model.entities:
         with open(join(srcgen_folder_frontend_model, "%s.ts" % entity.name.lower()), 'w') as f:
             f.write(template.render(entity=entity))
 
-    template = jinja_env.get_template('templates/frontend/entity/edit/entity-edit.component.ts.template')
+    # Edit template entity-edit
+    templates = ['edit','new','view']
+    for template in templates:
+        for entity in entity_model.entities:
+            template_ts = jinja_env.get_template("templates/frontend/entity/{template}/entity-{template}.component.ts.template".format(**{'template':template}))
+            template_html = jinja_env.get_template("templates/frontend/entity/{template}/entity-{template}.component.html.template".format(**{'template':template}))
+            srcgen_folder_frontend_entity = join(this_folder, "srcgen/frontend/{entity}/{entity}-{template}".format(**{'entity':entity.name.lower(),'template':template}))
+            if not os.path.exists(srcgen_folder_frontend_entity):
+                print "Creando carpeta: {}".format(srcgen_folder_frontend_entity)
+                os.makedirs(srcgen_folder_frontend_entity)
+            with open(join(srcgen_folder_frontend_entity, "{entity}-{template}.component.ts".format(**{'entity':entity.name.lower(),'template':template})), 'w') as f:
+                f.write(template_ts.render(entity=entity))
+            with open(join(srcgen_folder_frontend_entity, "{entity}-{template}.component.html".format(**{'entity':entity.name.lower(),'template':template})), 'w') as f:
+                f.write(template_html.render(entity=entity))
 
-    for entity in entity_model.entities:
-        with open(join(srcgen_folder_frontend_entity, "%s-edit.component.ts" % entity.name.lower()), 'w') as f:
-            f.write(template.render(entity=entity))
-
-    template = jinja_env.get_template('templates/frontend/entity/edit/entity-edit.component.html.template')
-
-    for entity in entity_model.entities:
-        with open(join(srcgen_folder_frontend_entity, "%s-edit.component.html" % entity.name.lower()), 'w') as f:
-            f.write(template.render(entity=entity))
-
-    template = jinja_env.get_template('templates/frontend/entity/new/entity-new.component.ts.template')
-
-    for entity in entity_model.entities:
-        with open(join(srcgen_folder_frontend_entity, "%s-new.component.ts" % entity.name.lower()), 'w') as f:
-            f.write(template.render(entity=entity))
-
-    template = jinja_env.get_template('templates/frontend/entity/new/entity-new.component.html.template')
-
-    for entity in entity_model.entities:
-        with open(join(srcgen_folder_frontend_entity, "%s-new.component.html" % entity.name.lower()), 'w') as f:
-            f.write(template.render(entity=entity))
-
-    template = jinja_env.get_template('templates/frontend/entity/view/entity.component.html.template')
-
-    for entity in entity_model.entities:
-        with open(join(srcgen_folder_frontend_entity, "%s.component.html" % entity.name.lower()), 'w') as f:
-            f.write(template.render(entity=entity))
-
-    template = jinja_env.get_template('templates/frontend/entity/view/entity.component.ts.template')
-
-    for entity in entity_model.entities:
-        with open(join(srcgen_folder_frontend_entity, "%s.component.ts" % entity.name.lower()), 'w') as f:
-            f.write(template.render(entity=entity))
-
-    template = jinja_env.get_template('templates/frontend/services/entity.service.ts.template')
-
+    # Routing Template
+    template = jinja_env.get_template('templates/frontend/routing/routing.module.ts.template')
     for entity in entity_model.entities:
         with open(join(srcgen_folder_frontend_services, "%s.service.ts" % entity.name.lower()), 'w') as f:
             f.write(template.render(entity=entity))
+
 
 if __name__ == "__main__":
     entity = None

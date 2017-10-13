@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+mimport { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { {{entity.name}} } from '../models/{{entity.name | lower}}';
 
@@ -36,7 +36,7 @@ export class {{entity.name}}Service {
 
 
   update({{entity.name | lower}}: {{entity.name}}): Promise<{{entity.name}}> {
-    const url = `${this.serviceURL}/${ {{entity.name | lower}}.id}`;
+    const url = `${this.serviceURL}/${ {{entity.name | lower}}._id}`;
     return this.http
       .put(url, JSON.stringify({{entity.name | lower}}), {headers: this.headers})
       .toPromise()
