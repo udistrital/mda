@@ -19,14 +19,32 @@ function gen {
   cp -r $OASGEN_PATH/srcgen $PWD
 }
 
+ent_file=$2
+
 if [ -z "$1" ]; then
-  echo "Debe pasar como parametro una entidad"
+  echo "Ingrese alguna opcion"
+  echo "oasgen init : Generar un proyecto"
+  echo "oasgen generate : Generar CRUD basado en archivo .ent"
 else
   # Verificar que el contenedor este corriendo
   docker_running=`docker ps -q -f name=^/oasgen$`
   if [ -z "$docker_running" ]; then
     echo "El contenedor del generador no esta corriendo ejecute el script de bootstrap primero"
   else
-    gen $1
+    if [ "$1" == "init" ]; then
+      if [ -z "$2" ]; then
+        echo "Ingrese un nombre para la aplicacion"
+        echo "oasgen init <nombre aplicacion>"
+      else
+        echo "Inicializando proyecto ..."
+        git clone https://github.com/bizoru/mongo-beego-angular.git $2
+      fi
+    fi
+    if [ "$1" == "generate" ]; then
+      gen $ent_file
+      cp -rv $PWD/srcgen/backend/* $PWD/../beego/code
+      cp -rv $PWD/srcgen/frontend/* $PWD/../angular4/code/src/app
+      rm -rf $PWD/srcgen
+    fi
   fi
 fi

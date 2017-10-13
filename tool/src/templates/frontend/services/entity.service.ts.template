@@ -1,4 +1,4 @@
-mimport { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { {{entity.name}} } from '../models/{{entity.name | lower}}';
 

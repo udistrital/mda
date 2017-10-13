@@ -133,7 +133,7 @@ def main(entity,debug=False):
         with open(join(srcgen_folder_frontend_model, "%s.ts" % entity.name.lower()), 'w') as f:
             f.write(template.render(entity=entity))
 
-    # Edit template entity-edit
+
     templates = ['edit','new','view']
     for template in templates:
         for entity in entity_model.entities:
@@ -150,6 +150,12 @@ def main(entity,debug=False):
 
     # Routing Template
     template = jinja_env.get_template('templates/frontend/routing/routing.module.ts.template')
+    for entity in entity_model.entities:
+        with open(join(srcgen_folder_frontend_routing, "routing.module.ts"), 'w') as f:
+            f.write(template.render(entity=entity))
+
+    # Services Template
+    template = jinja_env.get_template('templates/frontend/services/entity.service.ts.template')
     for entity in entity_model.entities:
         with open(join(srcgen_folder_frontend_services, "%s.service.ts" % entity.name.lower()), 'w') as f:
             f.write(template.render(entity=entity))

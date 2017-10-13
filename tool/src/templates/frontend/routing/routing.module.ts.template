@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { {{entity.name | capitalize }}Component } from '../[entity]/view/{{entity.name | lower }}.component';
-import { {{entity.name | capitalize }}NewComponent } from '../[entity]/new/{{entity.name | lower}}-new.component';
-import { {{entity.name | capitalize }}EditComponent } from '../[entity]/edit/{{entity.name | lower}}-edit.component';
+import { {{entity.name | capitalize }}Component } from '../{{entity.name | lower }}/{{entity.name | lower }}-view/{{entity.name | lower }}-view.component';
+import { {{entity.name | capitalize }}NewComponent } from '../{{entity.name | lower }}/{{entity.name | lower }}-new/{{entity.name | lower}}-new.component';
+import { {{entity.name | capitalize }}EditComponent } from '../{{entity.name | lower }}/{{entity.name | lower }}-edit/{{entity.name | lower}}-edit.component';
 
 
 const routes: Routes = [
