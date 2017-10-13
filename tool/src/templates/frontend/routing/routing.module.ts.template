@@ -1,0 +1,23 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { {{entity.name | capitalize }}Component } from '../[entity]/view/{{entity.name | lower }}.component';
+import { {{entity.name | capitalize }}NewComponent } from '../[entity]/new/{{entity.name | lower}}-new.component';
+import { {{entity.name | capitalize }}EditComponent } from '../[entity]/edit/{{entity.name | lower}}-edit.component';
+
+
+const routes: Routes = [
+  { path: '{{entity.name | lower }}', component: {{entity.name | capitalize }}Component },
+  { path: '{{entity.name | lower }}/new', component: {{entity.name | capitalize }}NewComponent },
+  { path: '{{entity.name | lower }}/edit/:id', component: {{entity.name | capitalize }}EditComponent },
+];
+
+@NgModule({
+  imports: [
+    CommonModule,
+    RouterModule.forRoot(routes)
+  ],
+  exports: [RouterModule],
+  declarations: []
+})
+export class RoutingModule { }

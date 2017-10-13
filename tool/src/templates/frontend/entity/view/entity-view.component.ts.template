@@ -1,0 +1,48 @@
+import { Component, OnInit } from '@angular/core';
+import { {{entity.name}}Service } from '../../services/{{entity.name|lower}}.service';
+import { {{entity.name}} } from '../../models/{{entity.name|lower}}';
+import { Router} from '@angular/router';
+import { GlobalsComponent } from '../../globals/globals.component';
+import { ConfirmationService } from 'primeng/primeng';
+
+@Component({
+  selector: 'app-{{entity.name|lower}}',
+  templateUrl: './{{entity.name|lower}}-view.component.html',
+  styleUrls: []
+})
+export class {{entity.name}}Component implements OnInit {
+
+  {{entity.name | lower}}s: {{entity.name}}[];
+  {{entity.name|lower}}: {{entity.name}};
+
+  constructor(private {{entity.name|lower}}Service: {{entity.name}}Service,
+      private router: Router, private globals: GlobalsComponent,
+      private confirmationService: ConfirmationService) {
+      this.globals = globals;
+  }
+
+  ngOnInit(): void {
+    this.{{entity.name|lower}}Service.get{{entity.name}}s().then({{entity.name|lower}}s => this.{{entity.name|lower}}s = {{entity.name|lower}}s);
+  }
+
+  new{{entity.name}}(): void {
+
+    this.router.navigate(['/{{entity.name|lower}}/new']).then(() => null);
+    this.globals.currentModule = '{{entity.name}}';
+  }
+
+  editar({{entity.name|lower}}: {{entity.name}}): void {
+    this.{{entity.name|lower}} = {{entity.name|lower}};
+    this.router.navigate(['/{{entity.name|lower}}/edit', this.{{entity.name|lower}}._id ]);
+  }
+
+  borrar({{entity.name|lower}}: {{entity.name}}): void {
+    this.confirmationService.confirm({
+      message: 'Esta seguro que quiere borrar {{entity.name|lower}}?',
+      accept: () => {
+        this.{{entity.name|lower}}Service.delete({{entity.name|lower}}._id)
+          .then(response => this.{{entity.name|lower}}Service.get{{entity.name}}s().then({{entity.name|lower}}s => this.{{entity.name|lower}}s = {{entity.name|lower}}s));
+      }
+    });
+  }
+}
