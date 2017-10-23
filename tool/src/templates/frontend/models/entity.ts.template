@@ -6,7 +6,7 @@ import { {{property.type.name | capitalize}} } from './{{ property.type.name | l
 {%endfor%}
 
 export class {{entity.name|capitalize}} {
-   id: string;
+   _id: string;
   {% for property in entity.properties %}
   {% if property is entity %}
   {{property.name}}: {{property.type.name}}[];

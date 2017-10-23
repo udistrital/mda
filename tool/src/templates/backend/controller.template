@@ -41,7 +41,7 @@ func (j *{{entity.name}}Controller) GetAll() {
 func (j *{{entity.name}}Controller) Get() {
 	id := j.GetString(":id")
 	session, _ := db.GetSession()
-	if name != "" {
+	if id != "" {
 		{{entity.name|lower}}, err := models.Get{{entity.name}}ById(session,id)
 		if err != nil {
 			j.Data["json"] = err.Error()
