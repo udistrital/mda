@@ -1,50 +1,85 @@
 #!/bin/bash
 
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+function oashelp {
+
+  echo "Uso oasgen: "
+  echo -e "oasgen init ${YELLOW}<proyecto> ${NC}: Generar un proyecto"
+  echo -e "oasgen generate ${YELLOW}<nombre_proyecto> ${NC}: Generar CRUD basado en archivo .ent"
+
+}
+
 function gen {
+
+  # Extraer el nombre del archivo de entidades
+  entities_file_path=$1
+  entities_file_name="${entities_file_path##*/}"
 
   # Eliminar cualquier entidad que ya exista
   rm -rf $OASGEN_PATH/entities/*
   rm -rf $PWD/srcgen
 
   # Copiar la entidad a la carpeta de entidades
-  cp $PWD/$1 $OASGEN_PATH/entities
+  cp $1 $OASGEN_PATH/entities
 
   # Borrar el codigo que se haya generado antes
-  docker exec -it oasgen bash -c "rm -rf /tool/srcgen/*"
+  rm -rf $OASGEN_PATH/srcgen/*
 
   # Hacer la llamada a Docker para genere el codigo
-  docker exec -it oasgen bash -c "python /tool/entity_codegen.py $1"
+  docker exec -it oasgen bash -c "python /tool/entity_codegen.py $entities_file_name"
+
+  # Apropiarse de los archivos
+  user_id=`id -u $(whoami)`
+  docker exec -it oasgen bash -c "chown -R $user_id:$user_id /tool/srcgen "
 
   # Copiar los resultados de regreso a la carpeta donde los necesita
   cp -r $OASGEN_PATH/srcgen $PWD
+
 }
 
-ent_file=$2
 
-if [ -z "$1" ]; then
-  echo "Ingrese alguna opcion"
-  echo "oasgen init : Generar un proyecto"
-  echo "oasgen generate : Generar CRUD basado en archivo .ent"
-else
+function init_oasgen_container {
+
   # Verificar que el contenedor este corriendo
   docker_running=`docker ps -q -f name=^/oasgen$`
+
   if [ -z "$docker_running" ]; then
     echo "El contenedor del generador no esta corriendo ejecute el script de bootstrap primero"
-  else
-    if [ "$1" == "init" ]; then
-      if [ -z "$2" ]; then
-        echo "Ingrese un nombre para la aplicacion"
-        echo "oasgen init <nombre aplicacion>"
-      else
-        echo "Inicializando proyecto ..."
-        git clone https://github.com/bizoru/mongo-beego-angular.git $2
-      fi
-    fi
-    if [ "$1" == "generate" ]; then
-      gen $ent_file
-      cp -rv $PWD/srcgen/backend/* $PWD/../beego/code
-      cp -rv $PWD/srcgen/frontend/* $PWD/../angular4/code/src/app
-      rm -rf $PWD/srcgen
+    cd $OASGEN_PATH
+    docker-compose up -d
+    echo "El contenedor para oasgen ha sido inicializado"
+  fi
+
+}
+
+function validate_params {
+  if [ "$1" == "init" ]; then
+    if [ -z "$2" ]; then
+      oashelp
+    else
+      echo "Inicializando proyecto ..."
+      git clone https://github.com/bizoru/mongo-beego-angular.git $2
     fi
   fi
+  if [ "$1" == "generate" ]; then
+    gen $2
+    echo -e "${BLUE}Copiando backend a beego/code...${NC}"
+    cp -Rv $PWD/srcgen/backend/* $PWD/../beego/code
+    echo -e "Copiando frontend a angular4/code/src/app${NC}"
+    cp -Rv $PWD/srcgen/frontend/* $PWD/../angular4/code/src/app
+    rm -rf $PWD/srcgen
+  fi
+  if [ -z "$2" ]; then
+    oashelp
+  fi
+}
+
+if [ -z "$1" ]; then
+   oashelp
+else
+  init_oasgen_container
+  validate_params $1 $2
 fi
